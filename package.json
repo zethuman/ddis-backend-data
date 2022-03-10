@@ -1,0 +1,17 @@
+{
+    "name": "ddis-backend-data",
+    "version": "1.0.0",
+    "description": "API for retrieving image metadatas for DDIS",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "author": "Rakhat Zhuman",
+    "license": "MIT",
+    "dependencies": {
+        "dotenv": "^16.0.0",
+        "express": "^4.17.1",
+        "ipfs-http-client": "^56.0.1",
+        "orbit-db": "^0.28.3"
+    }
+}
