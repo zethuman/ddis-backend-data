@@ -1,5 +1,5 @@
 var express = require('express');
-const { saveData, getData } = require('../services/images');
+const { saveData, getData, deleteData } = require('../services/images');
 const { hash } = require('../services/images/utils');
 var router = express.Router();
 
@@ -40,5 +40,23 @@ router.post('/post',
   }
 );
 
+router.delete('/delete',
+  async function (req, res) {
+    const body = req.body
+    try {
+      const key = hash(body.name + ":" + (body.tag ? body.tag : 'latest'))
+      try {
+        const deletedHash = await deleteData(key)
+        res.status(200).send({ "status": "deleted", "hash": deletedHash })
+      } catch (err) {
+        res.status(500).send({ "err": err })
+        return
+      }
+    } catch (err) {
+      console.trace(err)
+      res.status(500).send({ "err": err })
+    }
+  }
+);
 
 module.exports = router;
