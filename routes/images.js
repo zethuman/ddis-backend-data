@@ -1,9 +1,9 @@
 var express = require('express');
-const { saveData, getData } = require('../services/images');
+const { saveData, getData, deleteData } = require('../services/images');
 const { hash } = require('../services/images/utils');
 var router = express.Router();
 
-router.get('/get',
+router.post('/get',
   async function (req, res) {
     const imageName = req.body.name
     const tag = req.body.tag
@@ -11,7 +11,7 @@ router.get('/get',
       const key = hash(imageName + ":" + (tag ? tag : 'latest'))
       const data = await getData(key)
       if (!data) {
-        res.status(404).send({ "hash": `not found` })
+        res.status(204).send({ "hash": `not found` })
         return
       }
       res.status(200).send({ "data": data })
@@ -40,5 +40,23 @@ router.post('/post',
   }
 );
 
+router.delete('/delete',
+  async function (req, res) {
+    const body = req.body
+    try {
+      const key = hash(body.name + ":" + (body.tag ? body.tag : 'latest'))
+      try {
+        const deletedHash = await deleteData(key)
+        res.status(200).send({ "status": "deleted", "hash": deletedHash })
+      } catch (err) {
+        res.status(500).send({ "err": err })
+        return
+      }
+    } catch (err) {
+      console.trace(err)
+      res.status(500).send({ "err": err })
+    }
+  }
+);
 
 module.exports = router;
