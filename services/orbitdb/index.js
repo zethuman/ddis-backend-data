@@ -29,6 +29,7 @@ async function initOrbit() {
 
 async function getPublicDB() {
     await publicDB.load()
+    console.log(await publicDB.all)
     return publicDB
 }
 
